@@ -1,6 +1,6 @@
-from langchain_openai.chat_models import ChatOpenAI
+from myDefaultChat import myDefaultChat
 
-model = ChatOpenAI(model="gpt-3.5-turbo")
+model = myDefaultChat()
 
 response = model.invoke("The sky is")
 print(response.content)
