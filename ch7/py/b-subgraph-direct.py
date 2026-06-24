@@ -21,6 +21,7 @@ def subgraph_node(state: SubgraphState):
 
 subgraph_builder = StateGraph(SubgraphState)
 subgraph_builder.add_node("subgraph_node", subgraph_node)
+subgraph_builder.add_edge(START, "subgraph_node")
 # Additional subgraph setup would go here
 subgraph = subgraph_builder.compile()
 

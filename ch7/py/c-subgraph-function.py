@@ -13,13 +13,17 @@ class SubgraphState(TypedDict):
 
 
 # Define subgraph
-def subgraph_node(state: SubgraphState):
-    return {"bar": state["bar"] + "baz"}
+def subgraph_node_bar(state: SubgraphState):
+    return {"bar": state["bar"] + "bar"}
+def subgraph_node_baz(state: SubgraphState):
+    return {"baz": state["baz"] + "baz"}
 
 
 subgraph_builder = StateGraph(SubgraphState)
-subgraph_builder.add_node("subgraph_node", subgraph_node)
-subgraph_builder.add_edge(START, "subgraph_node")
+subgraph_builder.add_node("subgraph_node_bar", subgraph_node_bar)
+subgraph_builder.add_node("subgraph_node_baz", subgraph_node_baz)
+subgraph_builder.add_edge(START, "subgraph_node_bar")
+subgraph_builder.add_edge("subgraph_node_bar", "subgraph_node_baz")
 # Additional subgraph setup would go here
 subgraph = subgraph_builder.compile()
 
@@ -27,9 +31,9 @@ subgraph = subgraph_builder.compile()
 # Define parent graph node that invokes subgraph
 def node(state: State):
     # transform the state to the subgraph state
-    response = subgraph.invoke({"bar": state["foo"]})
+    response = subgraph.invoke({"bar": state["foo"], "baz": state["foo"]})
     # transform response back to the parent state
-    return {"foo": response["bar"]}
+    return {"foo": f"{response['bar']} {response['baz']}"}
 
 
 builder = StateGraph(State)

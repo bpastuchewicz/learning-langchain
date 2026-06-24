@@ -9,9 +9,11 @@ from langchain_core.messages import (
 from langchain_openai import ChatOpenAI
 from langgraph.graph import END, START, StateGraph
 from langgraph.graph.message import add_messages
+from myDefaultChat import myDefaultChat
+from rich import print
 
 # Initialize chat model
-model = ChatOpenAI()
+model = myDefaultChat(temperature=0.1)
 
 
 # Define state type
@@ -71,7 +73,7 @@ graph = builder.compile()
 initial_state = {
     "messages": [
         HumanMessage(
-            content="Write an essay about the relevance of 'The Little Prince' today."
+            content="Write an essay about the relevance of 'The Little Prince' today. Pisz po polsku."
         )
     ]
 }
@@ -79,5 +81,15 @@ initial_state = {
 # Run the graph
 for output in graph.stream(initial_state):
     message_type = "generate" if "generate" in output else "reflect"
-    print("\nNew message:", output[message_type]
-          ["messages"][-1].content[:100], "...")
+    tresc = output[message_type]["messages"][-1].content
+    
+    if message_type == "generate":
+        # Esej formatujemy na zielono, z ładnym nagłówkiem
+        print("\n[bold green]✍️  ESEJ (Generator):[/bold green]")
+        print(f"[green]{tresc}[/green]")
+        print("-" * 50)
+    else:
+        # Recenzję formatujemy na żółto/pomarańczowo
+        print("\n[bold orange3]🧐  RECENZJA (Krytyk):[/bold orange3]")
+        print(f"[orange3]{tresc}[/orange3]")
+        print("-" * 50)
