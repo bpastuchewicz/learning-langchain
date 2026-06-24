@@ -1,6 +1,6 @@
-from myDefaultChat import myDefaultChat
+from myDefaultChat import copilotChat
 
-model = myDefaultChat()
+model = copilotChat()
 
 response = model.invoke("The sky is")
 print(response.content)

@@ -6,6 +6,9 @@ import ast
 import operator
 import httpx
 import time
+import dotenv
+
+dotenv.load_dotenv()  # Załaduj zmienne środowiskowe z pliku .env
 
 # Cache dla session tokena
 _session_token_cache = {
